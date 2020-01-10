@@ -18,8 +18,7 @@ namespace GymBooking19.Data
             modelBuilder.Entity<ApplicationUserGymClass>().HasKey(t => new { t.ApplicationUserId, t.GymClassId });
         }
 
-        DbSet<GymClass> GymClasses;
-
         public DbSet<GymBooking19.Models.GymClass> GymClass { get; set; }
+        public DbSet<ApplicationUserGymClass> ApplicationUserGymClasses { get; set; }
     }
 }

@@ -168,27 +168,23 @@ namespace GymBooking19.Controllers
 
             if (gymClass == null) return NotFound();
 
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var userId = _userManager.GetUserId(User);
 
-            if (user == null) return NotFound();
+            if (userId == null) return NotFound();
 
-            var attendingMember = gymClass.AttendingMembers.FirstOrDefault(a => a.ApplicationUser.Id == user.Id);
+            var attendingMember = gymClass.AttendingMembers.FirstOrDefault(a => a.ApplicationUser.Id == userId);
 
             if (attendingMember == null)
             {
                 attendingMember = new ApplicationUserGymClass
                 {
-                    ApplicationUser = user,
-                    ApplicationUserId = user.Id,
-                    GymClass = gymClass,
+                    ApplicationUserId = userId,
                     GymClassId = gymClass.Id
                 };
-                gymClass.AttendingMembers.Add(attendingMember);
                 _context.Add(attendingMember);
                 await _context.SaveChangesAsync();
                 return View("Success");
             }
-            gymClass.AttendingMembers.Remove(attendingMember);
             _context.Remove(attendingMember);
             await _context.SaveChangesAsync();
             return View("Success");
