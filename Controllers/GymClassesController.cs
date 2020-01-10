@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GymBooking19.Data;
 using GymBooking19.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GymBooking19.Controllers
 {
@@ -49,6 +50,7 @@ namespace GymBooking19.Controllers
         }
 
         // GET: GymClasses/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -57,6 +59,7 @@ namespace GymBooking19.Controllers
         // POST: GymClasses/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,StartTime,Duration,Description")] GymClass gymClass)
@@ -71,6 +74,7 @@ namespace GymBooking19.Controllers
         }
 
         // GET: GymClasses/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,6 +93,7 @@ namespace GymBooking19.Controllers
         // POST: GymClasses/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartTime,Duration,Description")] GymClass gymClass)
@@ -122,6 +127,7 @@ namespace GymBooking19.Controllers
         }
 
         // GET: GymClasses/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,6 +146,7 @@ namespace GymBooking19.Controllers
         }
 
         // POST: GymClasses/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -150,6 +157,7 @@ namespace GymBooking19.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         public async Task<IActionResult> BookingToggle(int? id)
         {
             if (id == null) return NotFound();
