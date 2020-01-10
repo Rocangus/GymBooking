@@ -36,6 +36,15 @@
         </dd>
     </dl>
 </div>
+<hr />
+<h4>Booked Members</h4>
+<div>
+    @foreach (var attendee in Model.AttendingMembers)
+    {
+        <span>@attendee.ApplicationUser.Email</span><br />
+    }
+</div>
+<hr />
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>

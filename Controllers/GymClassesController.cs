@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymBooking19.Data;
 using GymBooking19.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace GymBooking19.Controllers
 {
     public class GymClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GymClassesController(ApplicationDbContext context)
+        public GymClassesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: GymClasses
@@ -34,7 +37,9 @@ namespace GymBooking19.Controllers
             }
 
             var gymClass = await _context.GymClass
+                .Include(g => g.AttendingMembers).ThenInclude(a => a.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (gymClass == null)
             {
                 return NotFound();
@@ -143,6 +148,47 @@ namespace GymBooking19.Controllers
             _context.GymClass.Remove(gymClass);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> BookingToggle(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var gymClass = await _context.GymClass
+                .Include(g => g.AttendingMembers)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (gymClass == null) return NotFound();
+
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (user == null) return NotFound();
+
+            var attendingMember = gymClass.AttendingMembers.FirstOrDefault(a => a.ApplicationUser.Id == user.Id);
+
+            if (attendingMember == null)
+            {
+                attendingMember = new ApplicationUserGymClass
+                {
+                    ApplicationUser = user,
+                    ApplicationUserId = user.Id,
+                    GymClass = gymClass,
+                    GymClassId = gymClass.Id
+                };
+                gymClass.AttendingMembers.Add(attendingMember);
+                _context.Add(attendingMember);
+                await _context.SaveChangesAsync();
+                return View("Success");
+            }
+            gymClass.AttendingMembers.Remove(attendingMember);
+            _context.Remove(attendingMember);
+            await _context.SaveChangesAsync();
+            return View("Success");
+        }
+
+        public IActionResult Success()
+        {
+            return View();
         }
 
         private bool GymClassExists(int id)
