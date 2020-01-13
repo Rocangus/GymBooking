@@ -1,12 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using GymBooking19.Data;
+using Microsoft.AspNetCore.Identity;
+using GymBooking19.Models;
 
 namespace GymBooking19
 {
@@ -22,7 +22,14 @@ namespace GymBooking19
 
                 try
                 {
-                    SeedData
+                    SeedData.Initialize(services, services.GetRequiredService<IConfiguration>(),
+                        services.GetRequiredService<UserManager<ApplicationUser>>(),
+                        services.GetRequiredService<RoleManager<IdentityRole>>()).Wait();
+                } 
+                catch (Exception e)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(e.Message, "Seed failed");
                 }
             }
 
