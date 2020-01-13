@@ -23,6 +23,10 @@ namespace GymBooking19.Data
                 if (!await roleManager.RoleExistsAsync(roleName))
                 {
                     roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
+                    if (roleResult != IdentityResult.Success)
+                    {
+                        throw new Exception(string.Join("\n", roleResult.Errors));
+                    }
                 }
 
                 if (!context.Users.Any(u => u.UserName == "admin@Gymbokning.se"))
@@ -30,7 +34,11 @@ namespace GymBooking19.Data
                     var admin = new ApplicationUser
                     {
                         UserName = "admin@Gymbokning.se",
-                        Email = "admin@Gymbokning.se"
+                        Email = "admin@Gymbokning.se",
+                        FirstName = "Administrator",
+                        LastName = "Foo",
+                        TimeOfRegistration = DateTime.UtcNow,
+                        EmailConfirmed = true
                     };
                     await userManager.CreateAsync(admin, configuration["AdminPassword"]);
                     await userManager.AddToRoleAsync(admin, roleName);

@@ -23,7 +23,7 @@ namespace GymBooking19.Controllers
         // GET: GymClasses
         public async Task<IActionResult> Index()
         {
-            return View(await _context.GymClass.ToListAsync());
+            return View(await _context.GymClass.Include(g => g.AttendingMembers).ThenInclude(a => a.ApplicationUser).ToListAsync());
         }
 
         // GET: GymClasses/Details/5
