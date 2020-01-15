@@ -24,7 +24,7 @@ namespace GymBooking19.Areas.Identity.Pages.Account.Manage
         }
 
         public string Username { get; set; }
-
+        public string FullName { get; private set; }
         [TempData]
         public string StatusMessage { get; set; }
 
@@ -44,6 +44,7 @@ namespace GymBooking19.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
+            FullName = user.FullName;
 
             Input = new InputModel
             {

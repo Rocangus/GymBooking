@@ -1,0 +1,12 @@
+﻿@model Tuple<GymClass, string>
+
+@if (Model.Item1.AttendingMembers.Any(a => a.ApplicationUser.Id == Model.Item2))
+{
+    <a asp-action="BookingToggle" asp-controller="GymClasses" asp-route-id="@Model.Item1.Id">Unbook</a><span> | </span>
+}
+else
+{
+    <a asp-action="BookingToggle" asp-controller="GymClasses" asp-route-id="@Model.Item1.Id">Book</a><span> | </span>
+}
+
+

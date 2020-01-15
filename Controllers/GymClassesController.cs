@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GymBooking19.Data;
 using GymBooking19.Models;
+using GymBooking19.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace GymBooking19.Controllers
 {
@@ -23,7 +25,22 @@ namespace GymBooking19.Controllers
         // GET: GymClasses
         public async Task<IActionResult> Index()
         {
-            return View(await _context.GymClass.Include(g => g.AttendingMembers).ThenInclude(a => a.ApplicationUser).ToListAsync());
+            var classes = await _context.GymClass.Include(g => g.AttendingMembers).ThenInclude(a => a.ApplicationUser).ToListAsync();
+
+            List<GymClassIndexViewModel> models = new List<GymClassIndexViewModel>();
+
+
+            foreach (var gymClass in classes)
+            {
+                GymClassIndexViewModel model = new GymClassIndexViewModel { Id = gymClass.Id, Name = gymClass.Name, 
+                    StartTime = gymClass.StartTime, Duration = gymClass.Duration.ToString(@"hh\:mm"), 
+                    Description = gymClass.Description, AttendingMembers = gymClass.AttendingMembers,
+                    EndTime = gymClass.EndTime.ToString()
+                };
+                models.Add(model);
+            }
+
+            return View(models);
         }
 
         // GET: GymClasses/Details/5
@@ -160,7 +177,7 @@ namespace GymBooking19.Controllers
             if (id == null) return NotFound();
 
             var gymClass = await _context.GymClass
-                .Include(g => g.AttendingMembers)
+                .Include(g => g.AttendingMembers).ThenInclude(a => a.ApplicationUser)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (gymClass == null) return NotFound();

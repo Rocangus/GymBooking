@@ -37,11 +37,22 @@ namespace GymBooking19.Data
                         Email = "admin@Gymbokning.se",
                         FirstName = "Administrator",
                         LastName = "Foo",
-                        TimeOfRegistration = DateTime.UtcNow,
-                        EmailConfirmed = true
+                        TimeOfRegistration = DateTime.UtcNow
                     };
-                    await userManager.CreateAsync(admin, configuration["AdminPassword"]);
-                    await userManager.AddToRoleAsync(admin, roleName);
+                    var addUserResult = await userManager.CreateAsync(admin, configuration["AdminPassword"]);
+
+                    if (!addUserResult.Succeeded)
+                    {
+                        throw new Exception(string.Join("\n", addUserResult.Errors));
+                    }
+
+                    var addToRoleResult = await userManager.AddToRoleAsync(admin, roleName);
+                    
+                    if (!addToRoleResult.Succeeded)
+                    {
+                        throw new Exception(string.Join("\n", addToRoleResult.Errors));
+                    }
+
                     await context.AddAsync(admin);
                     await context.SaveChangesAsync();
                 }

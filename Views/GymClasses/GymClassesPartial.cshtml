@@ -1,4 +1,16 @@
-﻿@model IEnumerable<GymClass>
+﻿@model IEnumerable<GymClassIndexViewModel>
+@inject UserManager<ApplicationUser> _userManager
+
+<div class="container">
+        <form asp-action="Index">
+            <div class="form-group">
+                <label for="historic" class="checkbox inline">Show past classes</label><input name="historic" class="form-control" type="checkbox" />
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-success" value="Filter" />
+            </div>
+        </form>
+</div>
 
 @foreach (var gymClass in Model)
 {
@@ -30,6 +42,9 @@
             @Html.DisplayFor(modelItem => gymClass.Duration)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => gymClass.EndTime)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => gymClass.Description)
         </td>
         <td>
@@ -40,7 +55,16 @@
                     <a asp-action="Edit" asp-route-id="@gymClass.Id">Edit</a> <span> | </span>
                     <a asp-action="Delete" asp-route-id="@gymClass.Id">Delete</a><span> | </span>
                 }
-                <a asp-action="BookingToggle" asp-route-id="@gymClass.Id"> Book </a> <span> | </span>
+                var userId = _userManager.GetUserId(User);
+                ILookup<int, string> lookup = gymClass.AttendingMembers.ToLookup(m => m.GymClassId, m => m.ApplicationUserId);
+                if (lookup[gymClass.Id].Contains(userId))
+                {
+                    <a asp-action="BookingToggle" asp-route-id="@gymClass.Id">Unbook</a><span> | </span>
+                }
+                else
+                {
+                    <a asp-action="BookingToggle" asp-route-id="@gymClass.Id">Book</a><span> | </span>
+                }
             }
             <a asp-action="Details" asp-route-id="@gymClass.Id">Details</a>
         </td>
