@@ -1,0 +1,41 @@
+﻿@model Tuple<ApplicationUser, IEnumerable<GymClassViewModel>>
+
+<table class="table table-borderless">
+<thead>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Start Time
+        </th>
+        <th>
+            Duration
+        </th>
+    </tr>
+</thead>
+<tbody>
+
+    @foreach (var gymClass in Model.Item2)
+    {
+        <tr>
+            <td>
+                @gymClass.Name
+            </td>
+            <td>
+                @gymClass.Description
+            </td>
+            <td>
+                @gymClass.StartTime
+            </td>
+            <td>
+                @gymClass.Duration
+            </td>
+        </tr>
+    }
+
+</tbody>
+    </table>

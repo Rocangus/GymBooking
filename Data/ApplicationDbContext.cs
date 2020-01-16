@@ -22,5 +22,6 @@ namespace GymBooking19.Data
 
         public DbSet<GymBooking19.Models.GymClass> GymClass { get; set; }
         public DbSet<ApplicationUserGymClass> ApplicationUserGymClasses { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

@@ -49,6 +49,7 @@ namespace GymBooking19.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
+            [Remote(action: "CheckEmail", controller: "ApplicationUsers")]
             public string Email { get; set; }
 
             [Required]

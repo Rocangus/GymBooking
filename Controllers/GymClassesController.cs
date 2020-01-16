@@ -8,6 +8,7 @@ using GymBooking19.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
+using System;
 
 namespace GymBooking19.Controllers
 {
@@ -23,19 +24,27 @@ namespace GymBooking19.Controllers
         }
 
         // GET: GymClasses
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool historic = false)
         {
-            var classes = await _context.GymClass.Include(g => g.AttendingMembers).ThenInclude(a => a.ApplicationUser).ToListAsync();
+            List<GymClass> classes;
+            if (historic)
+            {
+                classes = await _context.GymClass.Include(g => g.AttendingMembers).ThenInclude(a => a.ApplicationUser).IgnoreQueryFilters().ToListAsync();
+            }
+            else
+            {
+                classes = await _context.GymClass.Include(g => g.AttendingMembers).ThenInclude(a => a.ApplicationUser).ToListAsync();
+            }
 
-            List<GymClassIndexViewModel> models = new List<GymClassIndexViewModel>();
+            List<GymClassViewModel> models = new List<GymClassViewModel>();
 
 
             foreach (var gymClass in classes)
             {
-                GymClassIndexViewModel model = new GymClassIndexViewModel { Id = gymClass.Id, Name = gymClass.Name, 
+                GymClassViewModel model = new GymClassViewModel { Id = gymClass.Id, Name = gymClass.Name, 
                     StartTime = gymClass.StartTime, Duration = gymClass.Duration.ToString(@"hh\:mm"), 
                     Description = gymClass.Description, AttendingMembers = gymClass.AttendingMembers,
-                    EndTime = gymClass.EndTime.ToString()
+                    EndTime = gymClass.EndTime
                 };
                 models.Add(model);
             }
@@ -197,12 +206,14 @@ namespace GymBooking19.Controllers
                 };
                 _context.Add(attendingMember);
                 await _context.SaveChangesAsync();
-                return View("Success");
+                return View(nameof(Index));
             }
             _context.Remove(attendingMember);
             await _context.SaveChangesAsync();
-            return View("Success");
+            return View(nameof(Index));
         }
+
+        
 
         public IActionResult Success()
         {
