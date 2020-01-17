@@ -1,25 +1,25 @@
-﻿@model Tuple<ApplicationUser, IEnumerable<GymClassViewModel>>
+﻿@model IEnumerable<GymClassViewModel>
 
 <table class="table table-borderless">
 <thead>
     <tr>
         <th>
-            Name
+            @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
-            Description
+            @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
-            Start Time
+            @Html.DisplayNameFor(model => model.StartTime)
         </th>
         <th>
-            Duration
+            @Html.DisplayNameFor(model => model.Duration)
         </th>
     </tr>
 </thead>
 <tbody>
 
-    @foreach (var gymClass in Model.Item2)
+    @foreach (var gymClass in Model)
     {
         <tr>
             <td>

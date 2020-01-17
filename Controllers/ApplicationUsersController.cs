@@ -36,33 +36,34 @@ namespace GymBooking19.Controllers
 
         public IActionResult History()
         {
-            var tuple = GetModelForUserWithGymClasses(historic: true);
+            var viewModels = GetModelsForUserWithGymClasses(historic: true);
 
-            return View(tuple);
+            return View(viewModels);
         }
 
         public IActionResult BookedClasses()
         {
-            var tuple = GetModelForUserWithGymClasses(historic: false); ;
+            var viewModels = GetModelsForUserWithGymClasses(historic: false); ;
 
-            return View(tuple);
+            return View(viewModels);
         }
 
-        private Tuple<ApplicationUser, IEnumerable<GymClassViewModel>> GetModelForUserWithGymClasses(bool historic)
+        private IEnumerable<GymClassViewModel> GetModelsForUserWithGymClasses(bool historic)
         {
-            List<ApplicationUserGymClass> results = GetUserWithBookedClasses(historic);
+            List<ApplicationUserGymClass> userClasses = GetUserWithBookedClasses(historic);
 
+            var models = PopulateGymClassViewModels(userClasses);
             
-
-            Tuple<ApplicationUser, IEnumerable<GymClassViewModel>> tuple = new Tuple<ApplicationUser,
-                                                                                     IEnumerable<GymClassViewModel>>(user, gymClasses);
-            return tuple;
+            return models;
         }
 
-        private static void PopulateGymClassViewModels(ApplicationUser user, List<GymClassViewModel> gymClasses)
+        private static List<GymClassViewModel> PopulateGymClassViewModels(List<ApplicationUserGymClass> userClasses)
         {
-            foreach (var gymClass in user.AttendedClasses.Select(a => a.GymClass).ToList())
+            var gymClasses = new List<GymClassViewModel>();
+
+            foreach (var userClass in userClasses)
             {
+                var gymClass = userClass.GymClass;
                 GymClassViewModel model = new GymClassViewModel
                 {
                     Name = gymClass.Name,
@@ -72,6 +73,8 @@ namespace GymBooking19.Controllers
                 };
                 gymClasses.Add(model);
             }
+
+            return gymClasses;
         }
 
         public List<ApplicationUserGymClass> GetUserWithBookedClasses(bool history)
@@ -83,7 +86,6 @@ namespace GymBooking19.Controllers
             if(history)
             {
                 userTask = _context.ApplicationUserGymClasses
-                                     .Include(u => u.ApplicationUser)
                                      .Include(a => a.GymClass)
                                      .IgnoreQueryFilters()
                                      .Where(a => a.ApplicationUserId == userId && a.GymClass.StartTime < DateTime.UtcNow).ToListAsync();
@@ -91,7 +93,6 @@ namespace GymBooking19.Controllers
             else
             {
                 userTask = _context.ApplicationUserGymClasses
-                                     .Include(u => u.ApplicationUser)
                                      .Include(u => u.GymClass).Where(a => a.ApplicationUserId == userId).ToListAsync();
             }
 
