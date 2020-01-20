@@ -9,6 +9,7 @@ namespace GymBooking19.Core.Repositories
     {
         void Add(GymClass gymClass);
         Task<List<GymClass>> GetAllWithUsersAsync(bool historic);
+        Task<List<GymClass>> GetAllAsync(bool historic);
         bool GetAny(int id);
         Task<GymClass> GetClassByIdAsync(int? id);
         Task<GymClass> GetClassWithAttendingMembersAsync(int? id);

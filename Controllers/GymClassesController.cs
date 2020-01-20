@@ -27,10 +27,31 @@ namespace GymBooking19.Controllers
         // GET: GymClasses
         public async Task<IActionResult> Index(bool historic = false)
         {
-            List<GymClass> classes = await _unitOfWork.GymClasses.GetAllWithUsersAsync(historic);
+            List<GymClass> classes; 
 
             List<GymClassViewModel> models = new List<GymClassViewModel>();
 
+            if (!User.Identity.IsAuthenticated)
+            {
+                classes = await _unitOfWork.GymClasses.GetAllAsync(historic);
+                foreach (var gymClass in classes)
+                {
+                    GymClassViewModel model = new GymClassViewModel
+                    {
+                        Id = gymClass.Id,
+                        Name = gymClass.Name,
+                        StartTime = gymClass.StartTime,
+                        Duration = gymClass.Duration.ToString(@"hh\:mm"),
+                        Description = gymClass.Description,
+                        AttendingMembers = new List<ApplicationUserGymClass>(),
+                        EndTime = gymClass.EndTime
+                    };
+                    models.Add(model);
+                }
+                return View(classes);
+            }
+
+            classes = await _unitOfWork.GymClasses.GetAllWithUsersAsync(historic);
 
             foreach (var gymClass in classes)
             {

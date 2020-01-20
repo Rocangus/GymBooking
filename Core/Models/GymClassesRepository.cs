@@ -61,8 +61,21 @@ namespace GymBooking19.Core.Models
 
             return classes;
         }
+        
+        public async Task<List<GymClass>> GetAllAsync(bool historic)
+        {
+            List<GymClass> classes;
+            if (historic)
+            {
+                classes = await _context.GymClass.IgnoreQueryFilters().ToListAsync();
+            }
+            else
+            {
+                classes = await _context.GymClass.ToListAsync();
+            }
 
-
+            return classes;
+        }
 
         public bool GetAny(int id)
         {
