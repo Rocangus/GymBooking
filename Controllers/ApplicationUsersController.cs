@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GymBooking19.Core.Models;
 using GymBooking19.Data;
 using GymBooking19.Models;
 using GymBooking19.ViewModels;

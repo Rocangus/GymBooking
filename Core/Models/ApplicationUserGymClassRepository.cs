@@ -1,12 +1,14 @@
-﻿using GymBooking19.Models;
+﻿using GymBooking19.Core.Repositories;
+using GymBooking19.Data;
+using GymBooking19.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GymBooking19.Data.Repositories
+namespace GymBooking19.Core.Models
 {
-    public class ApplicationUserGymClassRepository : 
+    public class ApplicationUserGymClassRepository : IApplicationUserGymClassRepository
     {
         private readonly ApplicationDbContext _context;
 

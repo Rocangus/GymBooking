@@ -1,4 +1,5 @@
-﻿using GymBooking19.Models;
+﻿using GymBooking19.Core.Models;
+using GymBooking19.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

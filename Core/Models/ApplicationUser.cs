@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace GymBooking19.Models
+namespace GymBooking19.Core.Models
 {
     public class ApplicationUser : IdentityUser
     {

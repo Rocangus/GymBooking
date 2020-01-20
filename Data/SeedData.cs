@@ -1,4 +1,5 @@
-﻿using GymBooking19.Models;
+﻿using GymBooking19.Core.Models;
+using GymBooking19.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

@@ -1,6 +1,7 @@
 ﻿using GymBooking19.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using GymBooking19.Core.Models;
 
 namespace GymBooking19.Data
 {
@@ -20,7 +21,7 @@ namespace GymBooking19.Data
             modelBuilder.Entity<GymClass>().HasQueryFilter(g => g.StartTime > System.DateTime.Now);
         }
 
-        public DbSet<GymBooking19.Models.GymClass> GymClass { get; set; }
+        public DbSet<GymClass> GymClass { get; set; }
         public DbSet<ApplicationUserGymClass> ApplicationUserGymClasses { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }

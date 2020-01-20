@@ -4,10 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GymBooking19.Core.Repositories;
+using GymBooking19.Data;
 
-namespace GymBooking19.Data.Repositories
+namespace GymBooking19.Core.Models
 {
-    public class GymClassesRepository
+    public class GymClassesRepository : IGymClassesRepository
     {
         private ApplicationDbContext _context;
 
@@ -60,7 +62,7 @@ namespace GymBooking19.Data.Repositories
             return classes;
         }
 
-        
+
 
         public bool GetAny(int id)
         {

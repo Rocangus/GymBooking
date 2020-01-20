@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using GymBooking19.Models;
+using GymBooking19.Core.Models;
 
 namespace GymBooking19.Areas.Identity.Pages.Account
 {

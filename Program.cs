@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using GymBooking19.Data;
 using Microsoft.AspNetCore.Identity;
 using GymBooking19.Models;
+using GymBooking19.Core.Models;
 
 namespace GymBooking19
 {
